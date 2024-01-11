@@ -210,3 +210,146 @@ Commercial support is available at
 [baptiste@localhost ~]$
 ```
 
+🌞 Visitons
+
+```
+[baptiste@localhost ~]$ docker ps
+CONTAINER ID   IMAGE     COMMAND                  CREATED              STATUS              PORTS
+                       NAMES
+5dcd9460d297   nginx     "/docker-entrypoint.…"   About a minute ago   Up About a minute   80/tcp, 0.0.0.0:1000->8080/tcp, :::1000->8080/tcp   musing_hoover
+[baptiste@localhost ~]$ curl 10.1.1.100:1000
+<h1>MEOOOW</h1>[baptiste@localhost ~]$
+```
+
+# 5. Un deuxième conteneur en vif
+
+🌞 Lance un conteneur Python, avec un shell
+
+```
+[baptiste@localhost ~]$ docker run -it python bash
+Unable to find image 'python:latest' locally
+latest: Pulling from library/python
+bc0734b949dc: Pull complete
+b5de22c0f5cd: Pull complete
+917ee5330e73: Pull complete
+b43bd898d5fb: Pull complete
+7fad4bffde24: Pull complete
+d685eb68699f: Pull complete
+107007f161d0: Pull complete
+02b85463d724: Pull complete
+Digest: sha256:3733015cdd1bd7d9a0b9fe21a925b608de82131aa4f3d397e465a1fcb545d36f
+Status: Downloaded newer image for python:latest
+root@7db6267fc9b5:/#
+```
+
+🌞 Installe des libs Python
+
+```
+root@7db6267fc9b5:/# pip install aiohttp
+Collecting aiohttp
+  Obtaining dependency information for aiohttp from https://files.pythonhosted.org/packages/75/5f/90a2869ad3d1fb9bd984bfc1b02d8b19e381467b238bd3668a09faa69df5/aiohttp-3.9.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata
+
+    [...]
+
+[notice] A new release of pip is available: 23.2.1 -> 23.3.2
+[notice] To update, run: pip install --upgrade pip
+root@7db6267fc9b5:/# pip install aioconsole
+Collecting aioconsole
+  Obtaining dependency information for aioconsole from https://files.pythonhosted.org/packages/f7/39/b392dc1a8bb58342deacc1ed2b00edf88fd357e6fdf76cc6c8046825f84f/aioconsole-0.7.0-py3-none-any.whl.metadata
+  Downloading aioconsole-0.7.0-py3-none-any.whl.metadata (5.3 kB)
+Downloading aioconsole-0.7.0-py3-none-any.whl (30 kB)
+Installing collected packages: aioconsole
+Successfully installed aioconsole-0.7.0
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+
+[notice] A new release of pip is available: 23.2.1 -> 23.3.2
+[notice] To update, run: pip install --upgrade pip
+root@7db6267fc9b5:/# python
+Python 3.12.1 (main, Dec 19 2023, 20:14:15) [GCC 12.2.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import aiohttp
+```
+
+
+
+## II. Images
+
+# 1. Images publiques
+
+```
+[baptiste@localhost ~]$ docker pull python:3.11
+3.11: Pulling from library/python
+bc0734b949dc: Already exists
+[...]
+fefdcd9854bf: Pull complete
+Digest: sha256:4e5e9b05dda9cf699084f20bb1d3463234446387fa0f7a45d90689c48e204c83
+Status: Downloaded newer image for python:3.11
+docker.io/library/python:3.11
+[baptiste@localhost ~]$ docker mysql5.7
+docker: 'mysql5.7' is not a docker command.
+See 'docker --help'
+[baptiste@localhost ~]$ docker pull mysql5.7
+Using default tag: latest
+Error response from daemon: pull access denied for mysql5.7, repository does not exist or may require 'docker login': denied: requested access to the resource is denied
+[baptiste@localhost ~]$ ^C
+[baptiste@localhost ~]$ docker pull mysql 5.7.32
+"docker pull" requires exactly 1 argument.
+See 'docker pull --help'.
+
+Usage:  docker pull [OPTIONS] NAME[:TAG|@DIGEST]
+
+Download an image from a registry
+[baptiste@localhost ~]$ docker pull mysql5.7.32
+Using default tag: latest
+^C
+[baptiste@localhost ~]$ docker pull mysql:5.7.32
+5.7.32: Pulling from library/mysql
+a076a628af6f: Pull complete
+[...]
+8c3e9d7c9815: Pull complete
+fadfb9734ed2: Pull complete
+Digest: sha256:e08834258fcc0efd01df358222333919df53d4a0d9b2a54da05b204b822e3b7b
+Status: Downloaded newer image for mysql:5.7.32
+docker.io/library/mysql:5.7.32
+[baptiste@localhost ~]$ docker pull wordpress
+Using default tag: latest
+latest: Pulling from library/wordpress
+af107e978371: Already exists
+6480d4ad61d2: Pull complete
+95f5176ece8b: Pull complete
+[...]
+a1ff013e1d94: Pull complete
+31076364071c: Pull complete
+87728bbad961: Pull complete
+Digest: sha256:ffabdfe91eefc08f9675fe0e0073b2ebffa8a62264358820bcf7319b6dc09611
+Status: Downloaded newer image for wordpress:latest
+docker.io/library/wordpress:latest
+[baptiste@localhost ~]$ docker pull linuxserver/wikijs
+Using default tag: latest
+latest: Pulling from linuxserver/wikijs
+8b16ab80b9bd: Pull complete
+[...]
+20b23561c7ea: Pull complete
+Digest: sha256:131d247ab257cc3de56232b75917d6f4e24e07c461c9481b0e7072ae8eba3071
+Status: Downloaded newer image for linuxserver/wikijs:latest
+docker.io/linuxserver/wikijs:latest
+[baptiste@localhost ~]$
+[baptiste@localhost ~]$ docker images
+REPOSITORY           TAG       IMAGE ID       CREATED        SIZE
+linuxserver/wikijs   latest    869729f6d3c5   7 days ago     441MB
+python               latest    fc7a60e86bae   2 weeks ago    1.02GB
+wordpress            latest    fd2f5a0c6fba   2 weeks ago    739MB
+python               3.11      22140cbb3b0c   2 weeks ago    1.01GB
+nginx                latest    d453dd892d93   8 weeks ago    187MB
+hello-world          latest    d2c94e258dcb   7 months ago   13.3kB
+mysql                5.7.32    cc8775c0fe94   2 years ago    449MB
+[baptiste@localhost ~]$
+```
+
+```
+[baptiste@localhost ~]$ docker run -it python:3.11 bash
+root@56eabef8682f:/#
+root@56eabef8682f:/# python --version
+Python 3.11.7
+root@56eabef8682f:/#
+```
